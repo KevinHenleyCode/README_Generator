@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 
 
-
+// controlls what is put into the README
 const readmeContent = (userInput, licenseInfo) =>
 
     `
@@ -39,7 +39,6 @@ ${licenseChoice(userInput)}
 ## **License**
 ${licenseDetails(userInput)}
 <br>
-<br>
 
 ## **Contributing**
 * ${userInput.contributing}
@@ -60,7 +59,9 @@ ${licenseDetails(userInput)}
     `;
 
 
+// where the questions are generated and the options are provided
 inquirer.prompt([
+    // asks for the users input for title
     {
         type: 'input',
         name: 'title',
@@ -81,6 +82,7 @@ inquirer.prompt([
         name: 'usage',
         message: 'What is this programs intended perpose?'
     },
+    // gives the user a choice between 8 different options of licenses
     {
         type: 'list',
         name: 'license',
@@ -108,23 +110,23 @@ inquirer.prompt([
         message: 'What is your email?'
     }
 ])
+// takes the input from the user and feeds it into the README file
 .then((userInput) => {
 
     const readmeDoc = readmeContent(userInput);
 
-
     licenseDetails(userInput)
-
     licenseChoice(userInput)
 
-   
-   
-
+    // if an error is presented then the word error will be logged to the console 
     fs.writeFile('README.md', readmeDoc, (error) =>
     error ? console.log(error) : console.log('Your README file is ready!'));
 });
 
+
+// checks which license the user chose and which one it matches with, then returns the license badge string
 function licenseChoice(userInput) {
+
     switch (userInput.license) {
         case 'AGPL v3':
             return '[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)'
@@ -163,10 +165,11 @@ function licenseChoice(userInput) {
     }
 }
 
+
+// checks which license the user chose and which one it matches and then returns the license discription
 function licenseDetails(userInput) {
 
     switch (userInput.license) {
-
         case 'AGPL v3': 
                 return `### *AGPL v3* <br>
         Permissions of this strongest copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights. When a modified version is used to provide a service over a network, the complete source code of the modified version must be made available.`;
