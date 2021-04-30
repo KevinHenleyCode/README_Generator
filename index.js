@@ -3,19 +3,20 @@ const fs = require('fs');
 
 
 
-
-const readmeContent = (userInput) =>
+const readmeContent = (userInput, licenseInfo) =>
 
     `
 # ${userInput.title}
-${userInput.license}
+${licenseChoice(userInput)}
+<br>
 <br>
 
-## Description
-    ${userInput.description}
+## **Description**
+* ${userInput.description}
+<br>
 <br>
 
-## Table of Contents
+## **Table of Contents**
 - [Installation](#Installation) <br>
 - [Usage](#Usage) <br>
 - [License](#License) <br>
@@ -23,33 +24,38 @@ ${userInput.license}
 - [Tests](#Tests) <br>
 - [Questions](#Questions) <br>
 <br>
-
-## Installation
-    ${userInput.installation}
 <br>
 
-## Usage
-    ${userInput.usage}
+## **Installation**
+* ${userInput.installation}
+<br>
 <br>
 
-## License
-${licenseInfo}
+## **Usage**
+* ${userInput.usage}
+<br>
 <br>
 
-## Contributing
-    ${userInput.contribution}
+## **License**
+${licenseDetails(userInput)}
+<br>
 <br>
 
-## Tests
-    ${userInput.test}
+## **Contributing**
+* ${userInput.contributing}
+<br>
 <br>
 
-## Questions
-GitHub: https://github.com/${userInput.github}
-
-For more questions you can reach me at my Email:(${userInput.email})
-
+## **Tests**
+    
+* ${userInput.tests} 
 <br>
+<br>
+
+## **Questions**
+* GitHub: https://github.com/${userInput.github}
+
+* For more questions you can reach me at my Email:(${userInput.email})
 
     `;
 
@@ -79,41 +85,7 @@ inquirer.prompt([
         type: 'list',
         name: 'license',
         message: 'Choose your license.',
-        choices: [
-            {
-                key: 'AGPL v3', 
-                value: '[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)'
-            }, 
-            {
-                key:'GPL v3',
-                value: "[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)"
-            },
-            {
-                key: 'LGPL v3',
-                value: "[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)"
-            }, 
-            {
-                key: 'MPL 2.0',
-                value: "[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)"
-            }, 
-            {
-                key: 'Apache 2.0',
-                value: "[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)"
-            }, 
-            {
-                key: 'MIT',
-                value: "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)"
-            }, 
-            {
-                key: 'Boost 1.0',
-                value: "[![License: Boost 1.0](https://img.shields.io/badge/License-Boost%201.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)"
-            }, 
-            {
-                key: 'Unlicense',
-                value: "[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)"
-            }],
-           
-    
+        choices: ['AGPL v3', 'GPL v3', 'LGPL v3', 'MPL 2.0', 'Apache 2.0', 'MIT', 'Boost 1.0', 'Unlicense']
     },
     {
         type: 'input',
@@ -140,14 +112,102 @@ inquirer.prompt([
 
     const readmeDoc = readmeContent(userInput);
 
-    if (userInput.license == '[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)') {
-        let licenseInfo = `A permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an 
-        express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.`
-    }
 
+    licenseDetails(userInput)
+
+    licenseChoice(userInput)
+
+   
+   
 
     fs.writeFile('README.md', readmeDoc, (error) =>
     error ? console.log(error) : console.log('Your README file is ready!'));
 });
 
+function licenseChoice(userInput) {
+    switch (userInput.license) {
+        case 'AGPL v3':
+            return '[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)'
+            break;
 
+        case 'GPL v3':
+            return '[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)'
+            break;
+
+        case 'LGPL v3':
+            return '[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)'
+            break;
+
+        case 'MPL 2.0':
+            return '[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)'
+            break;
+
+        case 'Apache 2.0':
+            return '[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)'
+            break;
+
+        case 'MIT':
+            return '[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)'
+            break;
+
+        case 'Boost 1.0':
+            return '[![License: Boost 1.0](https://img.shields.io/badge/License-Boost%201.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)'
+            break;
+
+        case 'Unlicense':
+            return '[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)'
+            break;
+    
+        default:
+            break;
+    }
+}
+
+function licenseDetails(userInput) {
+
+    switch (userInput.license) {
+
+        case 'AGPL v3': 
+                return `### *AGPL v3* <br>
+        Permissions of this strongest copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights. When a modified version is used to provide a service over a network, the complete source code of the modified version must be made available.`;
+            break;
+        
+        case "GPL v3": 
+                return `### *GPL v3* <br>
+        Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.`;
+            break;
+        
+        case "LGPL v3": 
+                return `### *LGPL v3* <br>
+        Permissions of this copyleft license are conditioned on making available complete source code of licensed works and modifications under the same license or the GNU GPLv3. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights. However, a larger work using the licensed work through interfaces provided by the licensed work may be distributed under different terms and without source code for the larger work.`;
+            break;
+        
+        case "MPL 2.0": 
+                return `### *MPL 2.0* <br>
+        Permissions of this weak copyleft license are conditioned on making available source code of licensed files and modifications of those files under the same license (or in certain cases, one of the GNU licenses). Copyright and license notices must be preserved. Contributors provide an express grant of patent rights. However, a larger work using the licensed work may be distributed under different terms and without source code for files added in the larger work.`;
+            break;
+        
+        case 'Apache 2.0':
+                return `### *Apache 2.0* <br>
+        A permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.`;
+            break;
+       
+        case "MIT":
+                return `### *MIT* <br>
+        A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works, modifications, and larger works may be distributed under different terms and without source code.`;
+            break;
+        
+        case "Boost 1.0":
+                return `### *Boost 1.0* <br>
+        A simple permissive license only requiring preservation of copyright and license notices for source (and not binary) distribution. Licensed works, modifications, and larger works may be distributed under different terms and without source code.`;
+            break;
+        
+        case "Unlicense":
+                return `### *Unlicense* <br>
+        A license with no conditions whatsoever which dedicates works to the public domain. Unlicensed works, modifications, and larger works may be distributed under different terms and without source code.`;
+            break;
+    
+        default:
+            break;
+    }
+}
